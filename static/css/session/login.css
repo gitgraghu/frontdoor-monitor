@@ -1,0 +1,92 @@
+.footer{
+  background: #282828;
+  bottom: 0;
+  box-shadow: inset 0 3px 0 rgba(0,0,0,.1);
+  color: #F7F7F7;
+  cursor: pointer;
+  font-weight: 700;
+  height: 45px;
+  left: 0;
+  line-height: 45px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+}
+#about-us{
+  height: 0px;
+  transition: height .3s ease-out 1.7s;
+}
+.login_section{
+  background: url('../images/USCbackground.jpg');
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+}
+.panel{
+	box-shadow: 0 0 30px black;
+  margin: auto;
+  position: relative;
+  width: 300px;
+  z-index: 3;
+}
+.login-title-container{
+	margin:auto;
+  max-width:800px;
+  min-width:300px;
+  text-align:center;
+}
+.login-title{
+	color: white;
+	font-family: "HelveticaNeue-Light";
+	text-shadow: 2px 2px 5px black;
+}
+.checkbox input[type="checkbox"]{
+  margin-left:0;
+}
+.form-control{
+  margin-bottom: 5px;
+}
+.login-btn-container{
+  float: right;
+  position: relative;
+  right: 10px;
+}
+.container{
+  padding-bottom:100px;
+  padding-top:100px;
+}
+.about-text{
+  height:350px;
+}
+.about-img{
+  text-align: center;
+}
+.about-text-header{
+  padding-top:70px;
+}
+.wat-theme-white{
+  color: #F7F7F7;
+}
+.wat-theme-black{
+  color: #282828
+}
+.wat-theme-red{
+  color: #990000;
+}
+.wat-theme-gold{
+  color: #FFCC00;
+}
+@media(min-width: 992px) {
+  .login-title {
+    font-size: 5em;
+  }
+}
+@media(max-width: 992px) {
+  .login-title {
+    font-size: 2em;
+  }
+}
+@viewport{
+    width: device-width;
+}

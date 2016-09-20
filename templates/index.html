@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>DPD Open System Frontdoor</title>
+	<!-- <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet"> -->
+	<script src="../static/js/jquery-2.1.3.min.js"></script>
+	<script src="../static/js/bootstrap.js"></script>
+	<script src="../static/js/angular.js"></script>
+	<link href="../static/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Later put in the folder Script/js files -->
+<script type="text/javascript">
+function openTab(evt, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(tabName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+</script>
+
+<!-- Later put in the folder CSS files -->
+<style type="text/css">
+
+.table td, .table th {
+    border: none;
+}
+
+table.table.table-hover {
+    border: 3px solid #1A1F5A;
+
+}
+
+ul.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+}
+
+/* Float the list items side by side */
+ul.tab li {float: left;}
+
+/* Style the links inside the list items */
+ul.tab li a {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+/* Change background color of links on hover */
+ul.tab li a:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+ul.tab li a:focus, .active {
+    background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s;
+}
+
+@-webkit-keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+</style>
+
+
+		</head>
+              <body ng-app="App" ng-controller="AppController" style="height:100%;">
+              <!-- Header -->
+              <div class="container-fluid" >
+                <div class="row" style="background-color:#1A1F5A;">
+
+                    <div class="col-md-1" style="padding:10px;">
+                      <img src="../static/img/logo.png" height="50px;" width="100px;">
+                    </div>
+
+                    <div class="col-md-11" style="padding:20px;">
+                        <span class="pull-left" style="font-size:150%;color:white;" >
+                          Open System Front Door
+                        </span>
+                    </div>
+
+                </div>
+              </div>
+              <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ End Header ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+              <!-- Content -->
+              <div class="container-fluid" style="background-color:#E8E8E8;">
+                <ul class="tab">
+                <li><a href="#" class="tablinks" onclick="openTab(event, 'Requests')">My Requests</a></li>
+                <li><a href="#" class="tablinks" onclick="openTab(event, 'Pending')">Pending</a></li>
+                <li><a href="#" class="tablinks" onclick="openTab(event, 'Search')">Search By RTN</a></li>
+              <li></li>
+              </ul>
+
+<!-- Request Tab -->
+              <div id="Requests" class="tabcontent">
+              <div class="container-fluid" >
+              <div class="col-md-12">
+
+
+                <a href="#modalNewRequest" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+               <span class="glyphicon glyphicon-plus"></span> Make a New Request
+                </a>
+                <table class="table table-hover" >
+                      <thead border="1">
+                          <tr>
+                              <th>RTN</th>
+                              <th>Project Name</th>
+                              <th>Program Name</th>
+                              <th>Date Created</th>
+                              <th>Status</th>
+                              <th>(If Required)</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="project in projects">
+                              <td>{{project.RTN}}</td>
+                              <td>{{project.projectname}}</td>
+                              <td>{{project.programname}}</td>
+                              <td>{{project.datecreated}}</td>
+                              <td>{{project.status}}</td>
+                              <td>
+                                <button type="button" class="btn btn-primary">Edit</button>
+                                <button type="button" class="btn btn-danger">Delete</button>
+                              </td>
+                          
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                  </div>
+              </div>
+<!-- End of Request Tab -->
+
+
+<!-- Pending Tab -->
+              <div id="Pending" class="tabcontent">
+                 <div class="container-fluid" >
+              <div class="col-md-12">
+                <table class="table table-hover" >
+                      <thead border="1">
+                          <tr>
+                              <th>RTN</th>
+                              <th>Project Name</th>
+                              <th>Task</th>
+                              <th>Date Assigned</th>
+                              <th>Date Due</th>
+                              <th>Assigned By</th>
+                              <th>Status</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="project in projects">
+                              <td>{{project.RTN}}</td>
+                              <td>{{project.projectname}}</td>
+                              <td>
+
+                <!-- Analyst -->
+                <span ng-if="AssignAnalyst"> 
+								<a href="#modalAssignAnalyst" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+								                Assign Analyst
+								                </a>
+							   </span>
+
+                <!-- Project Manager -->
+							   <span ng-if="AssignPM"> 
+								<a href="#modalAssignPM" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+								                Assign PM
+								                </a>
+							   </span>
+
+							   <!-- Assessment -->
+							   <span ng-if="AnalystAssessment"> 
+								<a href="#AnalystAssessment" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+								                Review Impact
+								                </a>
+							   </span>
+                 <!-- Submit CA -->
+							   <span ng-if="SubmitCA"> 
+								<a href="#SubmitCA" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+								                Submit CA
+								                </a>
+							   </span>
+
+                              {{project.ptaskid}}
+                              </td> <!-- Customize here based on Task name -->
+                              <td>{{project.dateassigned}}</td>
+                              <td>{{project.datedue}}</td>
+                              <td>{{project.dassignedBy}}</td>
+                              <td>{{project.status}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+                  </div>
+              </div>
+<!-- End of Request Tab -->
+
+
+<!-- Search Tab -->
+              <div id="Search" class="tabcontent">
+                 <div class="container-fluid" >
+              <div class="col-md-12">
+                                  </div>
+                  </div>
+              </div>
+<!-- End of Search by RTN Tab -->
+
+<!-- Modals Sequence: 
+ 1. New Request 
+    Fields:
+      Program Name - select type field
+      Project Name - input type
+      Project RTN - input type
+      Request -  select type [entry: OOM, PM+Sizing]
+      Description - textarea
+      Upload CE/BRD - documents
+      Upload Other Documents - documents
+      Other Teams Impacted - Select type
+ 2. Assign analyst
+    Fields:
+      Project RTN - input type (readonly)
+      Project Name - input type (readonly)
+      Assign Analyst - Select Type (new field for this form)
+      Task Description - textarea Type (new field for this form)
+ 3. Assign PM
+      Project RTN - input type (readonly)
+      Project Name - input type (readonly)
+      Assign PM - Select Type (new field for this form)
+      Comments - textarea Type (new field for this form) 
+ 4. Analyst Assessment
+      Project RTN - input type (readonly)
+      Project Name - input type (readonly)
+      Documents - Read Only
+      Task - textarea type(new field for this form) 
+      Impact Type - select type [entry: Impact,No Impact](new field for this form) 
+      Assessment - textarea type(new field for this form) 
+      OOM(in $) - input type (new field for this form) 
+ 5. Analyst Submit CA
+      Project RTN - input type (readonly)
+      Project Name - input type (readonly)
+      Documents - Read Only
+      Impact Type - Read Only 
+      Documents - read only
+      Upload CA - file type (new field for this form) 
+ -->
+
+
+<!-- Modal for NEW REQUEST-->
+<div class="modal fade" id="modalNewRequest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">New Request Form</h4>
+      </div>
+      <div class="modal-body">
+      <!--  Program Name
+      Project Name
+      Project RTN
+      Request
+      Description
+      Upload CE/BRD
+      Upload Other Documents
+      Other Teams Impacted -->
+      
+
+  <form class="form-horizontal" role="form" id="new-request-form" style="margin:20px;">s
+
+    <div class="form-group">
+        <label for="teamType">Program Name</label>
+        <select class="form-control" id="programName" ng-model="currentproject.programname">
+          <option ng-repeat="program in programs">{{program.name}}</option>
+        </select>
+    </div>
+
+  <div class="form-group">
+    <label for="projectRTN">Project RTN</label>
+    <input type="text" class="form-control" id="projectRTN" ng-model="currentproject.projectRTN" placeholder="Enter project RTN">
+  </div>
+
+  <div class="form-group">
+    <label for="projectName">Project Name</label>
+    <input type="text" class="form-control" id="projectName" ng-model="currentproject.projectName" placeholder="Enter project Name">
+  </div>
+
+      <div class="form-group">
+    <label for="requestType">Request Type</label>
+    <select class="form-control" id="requestType" ng-model="currentproject.requestType">
+      <option>OOM</option>
+      <option>PM+Sizing</option>
+    </select>
+  </div>
+
+ <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" id="description" ng-model="currentproject.description" rows="3"></textarea>
+  </div>
+
+  <div class="form-group">
+  <label>Upload CE/BRD</label>
+  <input type="file" id="CE/BRD">
+  </div>
+
+   <div class="form-group">
+  <label>Other documents</label>
+  <input type="file" id="otherDocs">
+  </div>
+
+    <div class="form-group">
+        <label for="teamType">Primary Impacted Team</label>
+        <select class="form-control" id="teamType" ng-model="currentproject.teamType">
+          <option ng-repeat="team in teams">{{team.name}}</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+            <label class="col-md-3 control-label">Other Teams Impacted:</label>
+            <div class="col-md-6">
+              <div class="checkbox">
+                  <label ng-repeat="team in teams" style="margin-right:10px;">
+                   <input type="checkbox" name="conditioncheckboxes[]" value="{{team.code}}" id="{{team.code}}">{{team.name}}
+                  </label>
+              </div>
+            </div>
+    </div>
+
+
+      </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitrequest()">Submit Request</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<!-- Modal for ASSIGN ANALYST-->
+<div class="modal fade" id="modalAssignAnalyst" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Assign Analyst</h4>
+      </div>
+      <div class="modal-body">
+       <!-- Project RTN
+      Project Name
+      Assign Analyst
+      Task Description -->
+
+  <form class="form-horizontal" role="form" id="new-assign-analyst-form" style="margin:20px;">
+
+  <div class="form-group">
+    <label for="projectRTN">Project RTN</label>
+    <input type="text" class="form-control" value="{{analyst.RTN}}"" id="projectRTN" ng-model="analyst.projectRTN" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="projectName">Project Name</label>
+    <input type="text" class="form-control" value="{{analyst.projectname}}"" id="projectName" ng-model="analyst.projectName" placeholder="Enter project Name" readonly>
+  </div>
+
+   <div class="form-group">
+            <label class="col-md-3 control-label">Select Analysts</label>
+            <div class="col-md-6">
+              <div class="checkbox">
+                  <label ng-repeat="team in teams" style="margin-right:10px;">
+                   <input type="checkbox" name="conditioncheckboxes[]" value="{{analyst.code}}" id="{{analyst.code}}">{{analyst.name}}
+                  </label>
+              </div>
+            </div>
+    </div>
+
+ <div class="form-group">
+    <label for="description">Task Description</label>
+    <textarea class="form-control" id="description" ng-model="analyst.description" rows="3"></textarea>
+  </div>
+
+      </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitassignanalyst()">Assign Analyst</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Assign New Analyst -->
+
+
+
+
+
+
+
+<!-- Modal for ASSIGN PM-->
+<div class="modal fade" id="modalAssignPM" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Assign PM</h4>
+      </div>
+      <div class="modal-body">
+      <!-- Project RTN
+      Project Name
+      Assign PM
+      Comments -->
+
+  <form class="form-horizontal" role="form" id="new-assign-analyst-form" style="margin:20px;">
+
+  <div class="form-group">
+    <label for="projectRTN">Project RTN</label>
+    <input type="text" class="form-control" value="{{pm.RTN}}"" id="projectRTN" ng-model="pm.projectRTN" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="projectName">Project Name</label>
+    <input type="text" class="form-control" value="{{pm.projectname}}"" id="projectName" ng-model="pm.projectName" placeholder="Enter project Name" readonly>
+  </div>
+
+   <div class="form-group">
+        <label for="teamType">Select PM</label>
+        <select class="form-control" id="pmName" ng-model="pm.pmName">
+          <option ng-repeat="pm in pms">{{pm.name}}</option>
+        </select>
+    </div>
+
+ <div class="form-group">
+    <label for="description">Comments</label>
+    <textarea class="form-control" id="description" ng-model="pm.comments" rows="3"></textarea>
+  </div>
+
+      </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitassignpm()">Assign PM</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Assign New Analyst -->
+
+
+
+<!-- Modal for ANALYST ASSESSMENT-->
+<div class="modal fade" id="AnalystAssessment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Assign PM</h4>
+      </div>
+      <div class="modal-body">
+      <!-- Project RTN
+      Project Name
+      Documents
+      Task 
+      Impact Type
+      Assessment
+      OOM(in $)
+      -->
+
+  <form class="form-horizontal" role="form" id="new-assign-analyst-form" style="margin:20px;">
+
+  <div class="form-group">
+    <label for="projectRTN">Project RTN</label>
+    <input type="text" class="form-control" value="{{assessment.RTN}}"" id="projectRTN" ng-model="assessment.projectRTN" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="projectName">Project Name</label>
+    <input type="text" class="form-control" value="{{assessment.projectname}}"" id="projectName" ng-model="assessment.projectName" placeholder="Enter project Name" readonly>
+  </div>
+
+   <!-- Work on getting the document and display  -->
+
+ <div class="form-group">
+    <label for="description">Task</label>
+    <textarea class="form-control" id="description" ng-model="assessment.task" rows="3" readonly> {{assessment.task}}</textarea>
+  </div>
+
+  <div class="form-group">
+            <label class="col-md-3 control-label">Select</label>
+            <div class="col-md-6">
+              <div class="radio">
+                   <label class="form-check-label">
+				    <input class="form-check-input" type="radio" name="radioImpact" id="exampleRadios1" value="Impact">
+				    Impact
+				  </label>
+				  <label class="form-check-label">
+				    <input class="form-check-input" type="radio" name="radioNoImpact" id="exampleRadios1" value="NoImpact">
+				    No Impact
+				  </label>
+              </div>
+            </div>
+    </div>
+
+    <div class="form-group">
+    <label for="description">Assessment</label>
+    <textarea class="form-control" id="description" ng-model="assessment.assessment" rows="3"></textarea>
+    </div>
+
+    <div class="form-group">
+    <label for="projectOOM">OOM(in $)</label>
+    <input type="text" class="form-control" id="projectOOM" ng-model="assessment.OOM" placeholder="Enter project OOM(in $)">
+  </div>
+
+      </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitAssessment" class="btn btn-primary" ng-click="submitassessment()">Submit Assessment</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Assign New Analyst -->
+
+
+
+
+
+
+
+
+<!-- Modal for Submit CA-->
+<div class="modal fade" id="SubmitCA" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Assign PM</h4>
+      </div>
+      <div class="modal-body">
+      <!-- Project RTN
+      Project Name
+      Documents
+      Task 
+      Impact Type
+      Assessment
+      OOM(in $)
+      -->
+
+  <form class="form-horizontal" role="form" id="new-assign-analyst-form" style="margin:20px;">
+
+  <div class="form-group">
+    <label for="projectRTN">Project RTN</label>
+    <input type="text" class="form-control" value="{{assessment.RTN}}"" id="projectRTN" ng-model="submitCA.projectRTN" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="projectName">Project Name</label>
+    <input type="text" class="form-control" value="{{assessment.projectname}}"" id="projectName" ng-model="submitCA.projectName" placeholder="Enter project Name" readonly>
+  </div>
+
+  <div class="form-group">
+    <label for="projectName">Impact/ No Impact</label>
+    <input type="text" class="form-control" value="{{assessment.projectname}}"" id="projectName" ng-model="submitCA.impactType" placeholder="Enter project Name" readonly>
+  </div>
+
+  <!-- Work on getting the document and display  -->
+
+   <div class="form-group">
+    <label>Upload CA</label>
+    <input type="file" id="CE/BRD">
+    </div>
+
+      </form>
+
+      </div>
+      <div class="modal-footer">
+        <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitAssessment" class="btn btn-primary" ng-click="submitassessment()">Submit CA</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Assign New Analyst -->
+
+
+</div>
+              <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ End Content ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <!-- Footer -->
+                   <div class="container-fluid" >
+                  <div class="row">
+                  <div class="col-md-12" style="position: absolute; bottom: 0;background-color:#F7B600;" >
+                             <footer class="footer" >
+                                                          <div class="pull-left">
+                                                                        <div style="margin-top:5px;padding-bottom:5px;color:black;">
+                                                                        <label>Copyright &copy; 2016 Open System Front Door</label>
+                                                                        </div>
+                                                          </div>
+                             </footer>
+                             </div>
+                             </div>
+                             </div>
+                              <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ End Footer ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+	<script src="../static/js/app.js"></script>
+              </body>
+</html>
