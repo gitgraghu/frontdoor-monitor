@@ -68,6 +68,13 @@ def findByFlowId(flowId):
 		print "\n\n!!!!!!!!! Duplicate flow id found !!!!!!!!\n\n"
 	return res
 
+def getFlowByRTN(rtn):
+	cursor = flowDB.dummy.find({"rtn":rtn})
+	res = transformFlowCursor(cursor)
+	if(len(res)<1):
+		print "\n\nNothing found!!\n\n"
+	return res
+
 def constructStage(stage_mongo):
 	s = Workstage(json.dumps(stage_mongo, default=json_util.default), None, None, None)
 	emongo = s.employee
