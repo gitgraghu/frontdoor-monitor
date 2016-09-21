@@ -126,6 +126,8 @@ def PMFinalAction(request, status_desc, status_code):
 	#update all the previous status_desc
 	stages2 = f.flow[1]
 	for stage in stages2:
+		if status_code == Workflow.failed:
+			stage.status = Workflow.pending
 		stage.status_desc = status_desc
 	stages1 = f.flow[0]
 	for stage in stages1:
