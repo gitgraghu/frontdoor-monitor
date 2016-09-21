@@ -147,11 +147,11 @@ ul.tab li a:focus, .active {
                       </thead>
                       <tbody>
                           <tr ng-repeat="project in projects">
-                              <td>{{project.RTN}}</td>
-                              <td>{{project.projectname}}</td>
-                              <td>{{project.programname}}</td>
-                              <td>{{project.datecreated}}</td>
-                              <td>{{project.status}}</td>
+                              <td>{{project.data.projectRTN}}</td>
+                              <td>{{project.data.projectname}}</td>
+                              <td>{{project.data.programname}}</td>
+                              <td>{{project.data.datecreated}}</td>
+                              <td>{{project.data.status}}</td>
                               <td>
                                 <button type="button" class="btn btn-primary">Edit</button>
                                 <button type="button" class="btn btn-danger">Delete</button>

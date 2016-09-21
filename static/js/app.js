@@ -277,12 +277,18 @@ $scope.summary = {
 
     $http.get(url)
          .success(function(response){
-                    console.log(response);
-                   }
+                $scope.projects = response;
+                }
     );
 
 
   }
+$scope.init = function(){
+  $scope.initProjects();
+};
+
+  $scope.init()
+  
 
 // Analyst Submit CA END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
