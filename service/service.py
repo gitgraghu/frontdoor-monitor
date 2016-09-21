@@ -27,6 +27,7 @@ def createNewSimpleWorkFlowStage(request):
 	w.setProgram(None, programs)
 	data = getDataFromRequest(request)
 	w.setData(data)
+	w.status = w.getCurStatusDesc()
 	db.insertDummy(w)
 	return w
 
@@ -39,6 +40,7 @@ def analystAssignmentStage(request):
 	f = db.findByFlowId(f_id)[0]
 	assignanalystToStage(f, request)
 	#persist them inside database
+	f.status = f.getCurStatusDesc()
 	db.updateFlow(f)
 	#return the entire w
 	return f
@@ -71,6 +73,7 @@ def analystAssessment(request):
 	if allAssessmentDone:
 		moveToPMApproveStage(request, f)
 	#persist inside database
+	f.status = f.getCurStatusDesc()
 	db.updateFlow(f)
 	print "one analyst task finished"
 	return f
@@ -119,7 +122,7 @@ def PMApprove(request):
 	stages1 = f.flow[0]
 	for stage in stages1:
 		stage.status_desc = Workstage.PM5
-
+	f.status =f.getCurStatusDesc()
 	db.updateFlow(f)
 	return f
 
