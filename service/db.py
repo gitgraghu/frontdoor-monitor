@@ -34,7 +34,7 @@ def updateFlow(workflow):
 	result = flowDB.dummy.update({'_id':obj_id},{'$set':{'flow':json.loads(fl)}}, False, False)
 	print "updated! " + str(result)
 
-def transformCursor(cursor):
+def transformFlowCursor(cursor):
 	res = []
 	for fc in cursor:
 		print fc
@@ -56,14 +56,14 @@ def transformCursor(cursor):
 
 def findAllFlows():
 	cursor = flowDB.dummy.find()
-	res = transformCursor(cursor)
+	res = transformFlowCursor(cursor)
 	if(len(res)<1):
 		print "\n\nNothing found!!\n\n"
 	return res
 
 def findByFlowId(flowId):
 	cursor = flowDB.dummy.find({"flow_ID":flowId})
-	res = transformCursor(cursor)
+	res = transformFlowCursor(cursor)
 	if(len(res)>1):
 		print "\n\n!!!!!!!!! Duplicate flow id found !!!!!!!!\n\n"
 	return res
@@ -100,17 +100,13 @@ def getAllEmployees():
 		ems.append(em)
 	return ems
 
-# class Encoder(json.JSONEncoder):
-#   def default(self, obj):
-#     if isinstance(obj, Foo):
-#       return {'bar': obj.bar}
-#     return json.JSONEncoder.fault(self, obj)
+def getAllPMs():
+	ems = getAllEmployees()
+	pms = filter(lambda x : x.role=="PM" or x.role=="Project Manager", ems)
+	return pms
 
-# class Foo:
-#   def __init__(self, bar):
-#     self.bar = bar
-
-# foo = Foo("bar")
-# encoded = json.dumps(tokens, cls=Encoder)
-
+def getAllAnalysts():
+	ems = getAllEmployees()
+	ans = filter(lambda x : x.role=="Analyst", ems)
+	return ans
 
