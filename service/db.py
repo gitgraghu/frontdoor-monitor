@@ -34,13 +34,11 @@ def updateFlow(workflow):
 	result = flowDB.dummy.update({'_id':obj_id},{'$set':{'flow':json.loads(fl)}}, False, False)
 	print "updated! " + str(result)
 
-def findByFlowId(flowId):
-	cursor = flowDB.dummy.find({"flow_ID":flowId})
+def transformCursor(cursor):
 	res = []
 	for fc in cursor:
 		print fc
 		f = Workflow(json.dumps(fc,default=json_util.default))
-
 		st1 = []
 		for stage1 in f.flow[0]:
 			st1.append(constructStage(stage1))
@@ -50,12 +48,22 @@ def findByFlowId(flowId):
 		st3 = []
 		for stage3 in f.flow[2]:
 			st3.append(constructStage(stage3))
-
 		f.flow[2] = st3
 		f.flow[1] = st2
 		f.flow[0] = st1
-
 		res.append(f)
+	return res
+
+def findAllFlows():
+	cursor = flowDB.dummy.find()
+	res = transformCursor(cursor)
+	if(len(res)<1):
+		print "\n\nNothing found!!\n\n"
+	return res
+
+def findByFlowId(flowId):
+	cursor = flowDB.dummy.find({"flow_ID":flowId})
+	res = transformCursor(cursor)
 	if(len(res)>1):
 		print "\n\n!!!!!!!!! Duplicate flow id found !!!!!!!!\n\n"
 	return res
