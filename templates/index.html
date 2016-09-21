@@ -149,8 +149,8 @@ ul.tab li a:focus, .active {
               <div class="col-md-12">
 
 
-                <button href="#modalNewRequest" class="btn btn-success btn-sm pull-right" data-toggle="modal">
-               <span class="glyphicon glyphicon-plus"></span> Make a New Request
+                <button href="#modalNewRequest" class="btn btn-success btn-sm pull-right" data-toggle="modal" ng-click="resetRequestForm()">
+                 <span class="glyphicon glyphicon-plus"></span> Make a New Request
                 </button>
                 <table class="table table-hover" >
                       <thead border="1">
@@ -190,7 +190,7 @@ ul.tab li a:focus, .active {
 
 <!-- Pending Tab -->
               <div id="Pending" class="tabcontent">
-                 <div class="container-fluid card" >
+                 <div class="container-fluid card"  style="padding-top:40px">
               <div class="col-md-12">
                 <table class="table table-hover" >
                       <thead border="1">
@@ -271,7 +271,7 @@ ul.tab li a:focus, .active {
               </div>
 
                <!-- Show and Hide based on click of serach button -->
-                 <div class="container-fluid card" ><!-- style="display:none;" -->
+                 <div class="container-fluid card" ng-show="searchprojects.length > 0" ><!-- style="display:none;" -->
                 <table class="table table-hover" >
                       <thead border="1">
                           <tr>

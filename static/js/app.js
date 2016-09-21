@@ -115,9 +115,6 @@ $scope.summary = {
 
 
 
-
-
-// New Request Form
   $scope.submitrequest = function(){
 
     console.log($scope.currentproject);
@@ -131,12 +128,12 @@ $scope.summary = {
                   });
 
     $('#modalNewRequest').modal('hide');
-
   };
 
+  $scope.resetRequestForm = function(){
+    $scope.currentproject = {};
+  };
 
-
-// Opening Modal
 
    $scope.openModal = function(){ //Arguments passes: Modal to open, ID & objType(analyst,pm,assessment,submitCA)
 
@@ -150,15 +147,9 @@ $scope.summary = {
                   });
 
 
-
-    // $().modal('show'); //#modaltoshow
-
   };
 
 
-
-// Assign Analyst +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// On click of Submit in Assign analyst Modal
 
    $scope.submitassignanalyst = function(){ //ID Passed as argument
 
@@ -176,14 +167,6 @@ $scope.summary = {
     $('#modalAssignAnalyst').modal('hide');
 
   };
-
-// Assign Analyst END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
-// Assign PM  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// On click of Submit in Assign PM Modal
 
    $scope.submitassignpm = function(){//ID Passed as argument
 
@@ -204,9 +187,6 @@ $scope.summary = {
 
 
 
-// Analyst Assessment ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// On click of Submit in Analyst Assessment Modal
-
    $scope.submitassessment = function(){//ID Passed as argument
 
     console.log($scope.currentproject);
@@ -224,13 +204,6 @@ $scope.summary = {
 
   };
 
-// Assign Assessment END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
-
-
-// Analyst Submit CA ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// On click of Submit in Analyst Assessment Modal
 
    $scope.submitCAModel = function(){//ID Passed as argument
 
