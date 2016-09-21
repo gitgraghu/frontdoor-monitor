@@ -114,7 +114,7 @@ ul.tab li a:focus, .active {
               <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ End Header ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 
-              <!-- Content -->
+<!-- Content -->
               <div class="container-fluid" style="background-color:#E8E8E8;">
                 <ul class="tab">
                 <li><a href="#" class="tablinks" onclick="openTab(event, 'Requests')">My Requests</a></li>
@@ -123,15 +123,17 @@ ul.tab li a:focus, .active {
               <li></li>
               </ul>
 
+
+
 <!-- Request Tab -->
               <div id="Requests" class="tabcontent">
               <div class="container-fluid" >
               <div class="col-md-12">
 
 
-                <a href="#modalNewRequest" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+                <button href="#modalNewRequest" class="btn btn-success btn-sm pull-right" data-toggle="modal">
                <span class="glyphicon glyphicon-plus"></span> Make a New Request
-                </a>
+                </button>
                 <table class="table table-hover" >
                       <thead border="1">
                           <tr>
@@ -154,7 +156,7 @@ ul.tab li a:focus, .active {
                                 <button type="button" class="btn btn-primary">Edit</button>
                                 <button type="button" class="btn btn-danger">Delete</button>
                               </td>
-                          
+
                           </tr>
                       </tbody>
                   </table>
@@ -162,6 +164,10 @@ ul.tab li a:focus, .active {
                   </div>
               </div>
 <!-- End of Request Tab -->
+
+
+
+
 
 
 <!-- Pending Tab -->
@@ -182,43 +188,41 @@ ul.tab li a:focus, .active {
                       </thead>
                       <tbody>
                           <tr ng-repeat="project in projects">
-                              <td>{{project.RTN}}</td>
-                              <td>{{project.projectname}}</td>
+                              <td>{{pendingproject.RTN}}</td>
+                              <td>{{pendingproject.projectname}}</td>
                               <td>
 
                 <!-- Analyst -->
-                <span ng-if="AssignAnalyst"> 
-								<a href="#modalAssignAnalyst" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+                <span ng-if="AssignAnalyst">
+								<button href="#" class="btn btn-success btn-sm pull-right" data-toggle="modal" ng-click = "openModal('modalAssignAnalyst',project.id,analyst)">
 								                Assign Analyst
-								                </a>
+								                </button>
 							   </span>
 
                 <!-- Project Manager -->
-							   <span ng-if="AssignPM"> 
-								<a href="#modalAssignPM" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+							   <span ng-if="AssignPM">
+								<a href="#modalAssignPM" class="btn btn-success btn-sm pull-right" data-toggle="modal" ng-click = "openModal('modalAssignPM',project.id,pm)">
 								                Assign PM
 								                </a>
 							   </span>
 
 							   <!-- Assessment -->
-							   <span ng-if="AnalystAssessment"> 
-								<a href="#AnalystAssessment" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+							   <span ng-if="AnalystAssessment">
+								<a href="#AnalystAssessment" class="btn btn-success btn-sm pull-right" data-toggle="modal" ng-click = "openModal('AnalystAssessment',project.id,assessment)">
 								                Review Impact
 								                </a>
 							   </span>
                  <!-- Submit CA -->
-							   <span ng-if="SubmitCA"> 
-								<a href="#SubmitCA" class="btn btn-success btn-sm pull-right" data-toggle="modal">
+							   <span ng-if="SubmitCA">
+								<a href="#SubmitCA" class="btn btn-success btn-sm pull-right" data-toggle="modal" ng-click = "openModal('SubmitCA',project.id,submitCA)">
 								                Submit CA
 								                </a>
 							   </span>
-
-                              {{project.ptaskid}}
                               </td> <!-- Customize here based on Task name -->
-                              <td>{{project.dateassigned}}</td>
-                              <td>{{project.datedue}}</td>
-                              <td>{{project.dassignedBy}}</td>
-                              <td>{{project.status}}</td>
+                              <td>{{pendingproject.dateassigned}}</td>
+                              <td>{{pendingproject.datedue}}</td>
+                              <td>{{pendingproject.assignedBy}}</td>
+                              <td>{{pendingproject.status}}</td>
                           </tr>
                       </tbody>
                   </table>
@@ -228,17 +232,58 @@ ul.tab li a:focus, .active {
 <!-- End of Request Tab -->
 
 
+
+
+
+
+
 <!-- Search Tab -->
               <div id="Search" class="tabcontent">
                  <div class="container-fluid" >
               <div class="col-md-12">
-                                  </div>
+                <div class="input-group" style="margin:25px;">
+                <input type="text" class="form-control" placeholder="Search for project RTN" ng-model="search.RTN">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="submit" ng-click="submitsearchrequest()">
+                    <span class="glyphicon glyphicon-search"></span>
+                  </button>
+                </span>
+              </div>
+
+               <!-- Show and Hide based on click of serach button -->
+                 <div class="container-fluid" ><!-- style="display:none;" -->
+                <table class="table table-hover" >
+                      <thead border="1">
+                          <tr>
+                              <th>RTN</th>
+                              <th>Project Name</th>
+                              <th>Date Created</th>
+                              <th>Status</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr ng-repeat="project in searchprojects">
+                              <td>{{project.RTN}}</td>
+                              <td>{{project.projectname}}</td>
+                              <td>{{project.datecreated}}</td>
+                              <td>{{project.status}}</td>
+                          </tr>
+                      </tbody>
+                  </table>
+                  </div>
+              </div>
                   </div>
               </div>
 <!-- End of Search by RTN Tab -->
 
-<!-- Modals Sequence: 
- 1. New Request 
+
+
+
+
+
+
+<!-- Modals Sequence:
+ 1. New Request
     Fields:
       Program Name - select type field
       Project Name - input type
@@ -258,22 +303,22 @@ ul.tab li a:focus, .active {
       Project RTN - input type (readonly)
       Project Name - input type (readonly)
       Assign PM - Select Type (new field for this form)
-      Comments - textarea Type (new field for this form) 
+      Comments - textarea Type (new field for this form)
  4. Analyst Assessment
       Project RTN - input type (readonly)
       Project Name - input type (readonly)
       Documents - Read Only
-      Task - textarea type(new field for this form) 
-      Impact Type - select type [entry: Impact,No Impact](new field for this form) 
-      Assessment - textarea type(new field for this form) 
-      OOM(in $) - input type (new field for this form) 
+      Task - textarea type(new field for this form)
+      Impact Type - select type [entry: Impact,No Impact](new field for this form)
+      Assessment - textarea type(new field for this form)
+      OOM(in $) - input type (new field for this form)
  5. Analyst Submit CA
       Project RTN - input type (readonly)
       Project Name - input type (readonly)
       Documents - Read Only
-      Impact Type - Read Only 
+      Impact Type - Read Only
       Documents - read only
-      Upload CA - file type (new field for this form) 
+      Upload CA - file type (new field for this form)
  -->
 
 
@@ -296,10 +341,9 @@ ul.tab li a:focus, .active {
       Upload CE/BRD
       Upload Other Documents
       Other Teams Impacted -->
-      
 
-  <form class="form-horizontal" role="form" id="new-request-form" style="margin:20px;">s
 
+  <form class="form-horizontal" role="form" id="new-request-form" style="margin:20px;">
     <div class="form-group">
         <label for="teamType">Program Name</label>
         <select class="form-control" id="programName" ng-model="currentproject.programname">
@@ -408,7 +452,7 @@ ul.tab li a:focus, .active {
             <label class="col-md-3 control-label">Select Analysts</label>
             <div class="col-md-6">
               <div class="checkbox">
-                  <label ng-repeat="team in teams" style="margin-right:10px;">
+                  <label ng-repeat="analyst in analysts" style="margin-right:10px;">
                    <input type="checkbox" name="conditioncheckboxes[]" value="{{analyst.code}}" id="{{analyst.code}}">{{analyst.name}}
                   </label>
               </div>
@@ -417,7 +461,7 @@ ul.tab li a:focus, .active {
 
  <div class="form-group">
     <label for="description">Task Description</label>
-    <textarea class="form-control" id="description" ng-model="analyst.description" rows="3"></textarea>
+    <textarea class="form-control" id="description" ng-model="analyst.taskdescription" rows="3"></textarea>
   </div>
 
       </form>
@@ -425,7 +469,7 @@ ul.tab li a:focus, .active {
       </div>
       <div class="modal-footer">
         <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
-        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitassignanalyst()">Assign Analyst</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitassignanalyst(analyst.id)">Assign Analyst</button></div>
       </div>
     </div>
   </div>
@@ -458,12 +502,12 @@ ul.tab li a:focus, .active {
 
   <div class="form-group">
     <label for="projectRTN">Project RTN</label>
-    <input type="text" class="form-control" value="{{pm.RTN}}"" id="projectRTN" ng-model="pm.projectRTN" readonly>
+    <input type="text" class="form-control" value="{{pm.RTN}}" id="projectRTN" ng-model="pm.projectRTN" readonly>
   </div>
 
   <div class="form-group">
     <label for="projectName">Project Name</label>
-    <input type="text" class="form-control" value="{{pm.projectname}}"" id="projectName" ng-model="pm.projectName" placeholder="Enter project Name" readonly>
+    <input type="text" class="form-control" value="{{pm.projectname}}" id="projectName" ng-model="pm.projectName" placeholder="Enter project Name" readonly>
   </div>
 
    <div class="form-group">
@@ -483,7 +527,7 @@ ul.tab li a:focus, .active {
       </div>
       <div class="modal-footer">
         <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
-        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitassignpm()">Assign PM</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitNewRequest" class="btn btn-primary" ng-click="submitassignpm(pm.id)">Assign PM</button></div>
       </div>
     </div>
   </div>
@@ -506,7 +550,7 @@ ul.tab li a:focus, .active {
       <!-- Project RTN
       Project Name
       Documents
-      Task 
+      Task
       Impact Type
       Assessment
       OOM(in $)
@@ -562,7 +606,7 @@ ul.tab li a:focus, .active {
       </div>
       <div class="modal-footer">
         <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
-        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitAssessment" class="btn btn-primary" ng-click="submitassessment()">Submit Assessment</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitAssessment" class="btn btn-primary" ng-click="submitassessment(assessment.id)">Submit Assessment</button></div>
       </div>
     </div>
   </div>
@@ -584,13 +628,13 @@ ul.tab li a:focus, .active {
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">Assign PM</h4>
+        <h4 class="modal-title" id="myModalLabel">Submit CA</h4>
       </div>
       <div class="modal-body">
       <!-- Project RTN
       Project Name
       Documents
-      Task 
+      Task
       Impact Type
       Assessment
       OOM(in $)
@@ -600,17 +644,17 @@ ul.tab li a:focus, .active {
 
   <div class="form-group">
     <label for="projectRTN">Project RTN</label>
-    <input type="text" class="form-control" value="{{assessment.RTN}}"" id="projectRTN" ng-model="submitCA.projectRTN" readonly>
+    <input type="text" class="form-control" value="{{submitCA.RTN}}" id="projectRTN" ng-model="submitCA.projectRTN" readonly />
   </div>
 
   <div class="form-group">
     <label for="projectName">Project Name</label>
-    <input type="text" class="form-control" value="{{assessment.projectname}}"" id="projectName" ng-model="submitCA.projectName" placeholder="Enter project Name" readonly>
+    <input type="text" class="form-control" value="{{submitCA.projectname}}" id="projectName" ng-model="submitCA.projectName" placeholder="Enter project Name" readonly />
   </div>
 
   <div class="form-group">
     <label for="projectName">Impact/ No Impact</label>
-    <input type="text" class="form-control" value="{{assessment.projectname}}"" id="projectName" ng-model="submitCA.impactType" placeholder="Enter project Name" readonly>
+    <input type="text" class="form-control" value="{{submitCA.impactType}}" id="projectName" ng-model="submitCA.impactType" placeholder="Enter project Name" readonly />
   </div>
 
   <!-- Work on getting the document and display  -->
@@ -625,7 +669,7 @@ ul.tab li a:focus, .active {
       </div>
       <div class="modal-footer">
         <div class="pull-right" style="margin:10px;"><button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button></div>
-        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitAssessment" class="btn btn-primary" ng-click="submitassessment()">Submit CA</button></div>
+        <div class="pull-right" style="margin:10px;"><button type="submit" id="submitAssessment" class="btn btn-primary" ng-click="submitCAModel(submitCA.id)">Submit CA</button></div>
       </div>
     </div>
   </div>
