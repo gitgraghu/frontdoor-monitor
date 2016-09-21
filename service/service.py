@@ -92,7 +92,8 @@ def moveToPMApproveStage(request, workflow):
 
 	stages3 = workflow.flow[2]
 	if(len(stages3)>0):
-		print "Already at 3rd stage"
+		print "3rd stage already init"
+		stages3[0].status_desc = Workstage.PM4
 	else:
 		newStage = Workstage(None, 3, Workflow.pending, Workstage.PM4)
 		newStage.assignEmployee(st1.employee)
@@ -101,6 +102,12 @@ def moveToPMApproveStage(request, workflow):
 
 #limited to 1 PM at this point
 def PMApprove(request):
+	return PMFinalAction(request, Workstage.PM5, Workflow.success)
+
+def PMReject(request):
+	return PMFinalAction(request, Workstage.AN3, Workflow.failed)
+
+def PMFinalAction(request, status_desc, status_code):
 	pmid = getPMIDFromRequest(request)
 	f_id = getFlowIdFromRequest(request)
 	f = db.findByFlowId(f_id)[0]
@@ -110,19 +117,19 @@ def PMApprove(request):
 	st3 = stages3[0]
 	if pmid != st3.employee.eid:
 		raise ValueError("PM Id not matched for approvement")
-	if st3.status == 'S':
-		raise ValueError("The Project has been approved already")
-	st3.status == 'S'
-	st3.status_desc = Workstage.PM5
+	if st3.status == status_code:
+		raise ValueError("The Project has been "+status_desc+" already")
+	st3.status == status_code
+	st3.status_desc = status_desc
 	st3.setData(getDataFromPMApprovalRequest(request))
 
 	#update all the previous status_desc
 	stages2 = f.flow[1]
 	for stage in stages2:
-		stage.status_desc = Workstage.PM5
+		stage.status_desc = status_desc
 	stages1 = f.flow[0]
 	for stage in stages1:
-		stage.status_desc = Workstage.PM5
+		stage.status_desc = status_desc
 	f.status =f.getCurStatusDesc()
 	db.updateFlow(f)
 	return f
