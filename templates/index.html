@@ -30,12 +30,31 @@ function openTab(evt, tabName) {
 <!-- Later put in the folder CSS files -->
 <style type="text/css">
 
+body {
+    background-color: #f2f2f2;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    color: #555;
+    -webkit-font-smoothing: antialiased;
+    -webkit-overflow-scrolling: touch;
+}
+
+.card{
+    padding:10px;
+    margin-top:30px;
+    background-color: #fff;
+    border-radius: 2px;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.18),0 2px 10px 0 rgba(0,0,0,0.18);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0,0,0,0.18),0 2px 10px 0 rgba(0,0,0,0.18);
+    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.18),0 2px 10px 0 rgba(0,0,0,0.18);
+}
+
 .table td, .table th {
     border: none;
 }
 
 table.table.table-hover {
-    border: 3px solid #1A1F5A;
+    /* border: 3px solid #1A1F5A; */
 
 }
 
@@ -45,7 +64,7 @@ ul.tab {
     padding: 0;
     overflow: hidden;
     border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    background-color: #fff;
 }
 
 /* Float the list items side by side */
@@ -75,7 +94,6 @@ ul.tab li a:focus, .active {
 /* Style the tab content */
 .tabcontent {
     display: none;
-    padding: 6px 12px;
     -webkit-animation: fadeEffect 1s;
     animation: fadeEffect 1s;
 }
@@ -100,7 +118,7 @@ ul.tab li a:focus, .active {
                 <div class="row" style="background-color:#1A1F5A;">
 
                     <div class="col-md-1" style="padding:10px;">
-                      <img src="../static/img/logo.png" height="50px;" width="100px;">
+                      <img src="../static/img/logo.png" height="40px;" width="100px;">
                     </div>
 
                     <div class="col-md-11" style="padding:20px;">
@@ -115,7 +133,7 @@ ul.tab li a:focus, .active {
 
 
 <!-- Content -->
-              <div class="container-fluid" style="background-color:#E8E8E8;">
+              <div class="container-fluid">
                 <ul class="tab">
                 <li><a href="#" class="tablinks" onclick="openTab(event, 'Requests')">My Requests</a></li>
                 <li><a href="#" class="tablinks" onclick="openTab(event, 'Pending')">Pending</a></li>
@@ -127,7 +145,7 @@ ul.tab li a:focus, .active {
 
 <!-- Request Tab -->
               <div id="Requests" class="tabcontent">
-              <div class="container-fluid" >
+              <div class="container-fluid card" >
               <div class="col-md-12">
 
 
@@ -142,7 +160,7 @@ ul.tab li a:focus, .active {
                               <th>Program Name</th>
                               <th>Date Created</th>
                               <th>Status</th>
-                              <th>(If Required)</th>
+                              <th></th>
                           </tr>
                       </thead>
                       <tbody>
@@ -150,8 +168,8 @@ ul.tab li a:focus, .active {
                               <td>{{project.data.projectRTN}}</td>
                               <td>{{project.data.projectname}}</td>
                               <td>{{project.data.programname}}</td>
-                              <td>{{project.data.datecreated}}</td>
-                              <td>{{project.data.status}}</td>
+                              <td>{{project.datetime}}</td>
+                              <td>{{project.status}}</td>
                               <td>
                                 <button type="button" class="btn btn-primary">Edit</button>
                                 <button type="button" class="btn btn-danger">Delete</button>
@@ -161,7 +179,7 @@ ul.tab li a:focus, .active {
                       </tbody>
                   </table>
                   </div>
-                  </div>
+              </div>
               </div>
 <!-- End of Request Tab -->
 
@@ -172,7 +190,7 @@ ul.tab li a:focus, .active {
 
 <!-- Pending Tab -->
               <div id="Pending" class="tabcontent">
-                 <div class="container-fluid" >
+                 <div class="container-fluid card" >
               <div class="col-md-12">
                 <table class="table table-hover" >
                       <thead border="1">
@@ -187,7 +205,7 @@ ul.tab li a:focus, .active {
                           </tr>
                       </thead>
                       <tbody>
-                          <tr ng-repeat="project in projects">
+                          <tr ng-repeat="pendingproject in pendingprojects">
                               <td>{{pendingproject.RTN}}</td>
                               <td>{{pendingproject.projectname}}</td>
                               <td>
@@ -242,16 +260,18 @@ ul.tab li a:focus, .active {
                  <div class="container-fluid" >
               <div class="col-md-12">
                 <div class="input-group" style="margin:25px;">
-                <input type="text" class="form-control" placeholder="Search for project RTN" ng-model="search.RTN">
+                <form ng-submit="findByRTN(search.RTN)">
+                 <input type="text" class="form-control" placeholder="Search for project RTN" ng-model="search.RTN">
+                </form>
                 <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit" ng-click="submitsearchrequest()">
+                  <button class="btn btn-default" type="submit" ng-click="findByRTN(search.RTN)">
                     <span class="glyphicon glyphicon-search"></span>
                   </button>
                 </span>
               </div>
 
                <!-- Show and Hide based on click of serach button -->
-                 <div class="container-fluid" ><!-- style="display:none;" -->
+                 <div class="container-fluid card" ><!-- style="display:none;" -->
                 <table class="table table-hover" >
                       <thead border="1">
                           <tr>
@@ -263,9 +283,9 @@ ul.tab li a:focus, .active {
                       </thead>
                       <tbody>
                           <tr ng-repeat="project in searchprojects">
-                              <td>{{project.RTN}}</td>
-                              <td>{{project.projectname}}</td>
-                              <td>{{project.datecreated}}</td>
+                              <td>{{project.data.projectRTN}}</td>
+                              <td>{{project.data.projectname}}</td>
+                              <td>{{project.datetime}}</td>
                               <td>{{project.status}}</td>
                           </tr>
                       </tbody>
@@ -396,7 +416,7 @@ ul.tab li a:focus, .active {
             <div class="col-md-6">
               <div class="checkbox">
                   <label ng-repeat="team in teams" style="margin-right:10px;">
-                   <input type="checkbox" name="conditioncheckboxes[]" value="{{team.code}}" id="{{team.code}}">{{team.name}}
+                   <input type="checkbox" name="conditioncheckboxes[]" value="{{team.name}}" id="{{team.code}}">{{team.name}}
                   </label>
               </div>
             </div>

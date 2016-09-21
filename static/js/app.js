@@ -4,28 +4,8 @@ var app = angular.module('App', []);
 
 app.controller('AppController', function($scope, $http){
 
-// MY REQUEST PAGE
 
-              $scope.projects = [
-                {
-                  "id" : "jkasfkha",
-                  "projectRTN": "820820",
-                  "projectname": "VLPS",
-                  "programname": "Loyalty and Marketing",
-                  "datecreated": "09/16/2016",
-                  "requesttype": "OOM",
-                  "status": "Waiting for Analyst Selection"
-                },
-                {
-                  "id": "kashjfhakjdl",
-                  "RTN": "820820",
-                  "projectname": "Rewards Redemption",
-                  "programname": "Loyalty and Marketing",
-                  "datecreated": "09/16/2016",
-                  "requesttype": "OOM",
-                  "status": "Waiting for Analyst Assessment"
-                }
-              ];
+              $scope.projects = [];
 
               $scope.teams = [  {"code": "R", "name": "Risk and Authetication"},
                                 {"code": "D", "name": "Data Platform"},
@@ -41,10 +21,20 @@ app.controller('AppController', function($scope, $http){
                                 {"code": "NAPP", "name": "North America Prepaid Products"}
               ];
 
+              $scope.analysts =[
+                                // {"code": "G", "name": "Govind, Raghu"},
+                                // {"code": "Y","name": "Youming, Ye"},
+                                // {"code": "S","name": "Priya, Saloni"}
+               ];
 
-// PENDING PAGE
-              $scope.pendingproject = {
-                  "id" : "jkasfkha",
+               $scope.pms =[
+                                // {"code": "S", "name": "Solomon, Taylor"},
+                                // {"code": "R", "name": "Ravichandran, Rathi"}
+               ];
+
+
+              $scope.pendingprojects = [
+                {"id" : "jkasfkha",
                   "RTN": "820820",
                   "projectname": "VLPS",
                   //True and False for ng-if conditions (From flow)
@@ -56,7 +46,7 @@ app.controller('AppController', function($scope, $http){
                   "datedue": "09/16/2016",
                   "assignedBy": "PM Name", //Should be requester name if waiting PM Assignment - This will come from Login in future {For now say N/A where applicable}
                   "status": "Waiting PM Assignment"
-              };
+              }];
 
                // For PENDING PAGE MODALS
                //Assign Analyst Form
@@ -67,11 +57,6 @@ app.controller('AppController', function($scope, $http){
                };
 
                //I don not require code, but trying to keep the syntax similar to above
-               $scope.analysts =[
-                                {"code": "G", "name": "Govind, Raghu"},
-                                {"code": "Y","name": "Youming, Ye"},
-                                {"code": "S","name": "Priya, Saloni"}
-               ];
 
 
                //Assign PM Form
@@ -81,10 +66,6 @@ app.controller('AppController', function($scope, $http){
                "projectname": "VLPS"
                };
 
-               $scope.pms =[
-                                {"code": "S", "name": "Solomon, Taylor"},
-                                {"code": "R", "name": "Ravichandran, Rathi"}
-               ];
 
                //Analayst Assessment
                $scope.assessment ={
@@ -108,12 +89,12 @@ app.controller('AppController', function($scope, $http){
 
 //SEARCH PAGE
 $scope.searchprojects = [
-    {
-      "RTN": "820820",
-      "projectname": "VLPS",
-      "datecreated": "09/16/2016",
-      "status": "Waiting for Analyst Selection"
-    }
+    // {
+    //   "RTN": "820820",
+    //   "projectname": "VLPS",
+    //   "datecreated": "09/16/2016",
+    //   "status": "Waiting for Analyst Selection"
+    // }
   ];
 
 
@@ -147,10 +128,7 @@ $scope.summary = {
          .success(function(response){
                     console.log(response);
                     $scope.projects.push(response)
-                    console.log($scope.projects)
                   });
-
-
 
     $('#modalNewRequest').modal('hide');
 
@@ -271,26 +249,110 @@ $scope.summary = {
 
   };
 
+  $scope.findByRTN = function(RTN){
+
+    var RTNreq = {"RTN": RTN};
+    var url = "http://localhost:5000/api/findbyRTN";
+    var payload = JSON.stringify(RTNreq);
+
+    $http.post(url, payload)
+         .success(function(response){
+                    console.log(response);
+                    for(var flow in response){
+                        $scope.searchprojects.push(JSON.parse(response[flow]));
+                    }
+                    console.log($scope.searchprojects)
+                  });
+
+  };
+
+
+
+   $scope.submitassignanalyst = function(){ //ID Passed as argument
+
+    console.log($scope.currentproject);
+    var url = "http://localhost:5000/api/project"
+    var payload = JSON.stringify($scope.currentproject);
+
+    $http.post(url, payload)
+         .success(function(response){
+                    console.log(response);
+                  });
+
+
+
+    $('#modalAssignAnalyst').modal('hide');
+
+  };
+
+
+   $scope.submitassignpm = function(){//ID Passed as argument
+
+    console.log($scope.currentproject);
+    var url = "http://localhost:5000/api/project"
+    var payload = JSON.stringify($scope.currentproject);
+
+    $http.post(url, payload)
+         .success(function(response){
+                    console.log(response);
+                  });
+
+
+
+    $('#modalAssignPM').modal('hide');
+
+  };
+
 
   $scope.initProjects = function(){
-    var url = "http://localhost:5000/api/project"
+    var url = "http://localhost:5000/api/project";
 
     $http.get(url)
          .success(function(response){
-                $scope.projects = response;
+                console.log(response)
+                for(var workflow in response){
+                    $scope.projects.push(JSON.parse(response[workflow]));
+                }
+           console.log($scope.projects);
                 }
     );
-
-
   }
-$scope.init = function(){
-  $scope.initProjects();
-};
+
+  $scope.initAnalysts = function(){
+    var url = "http://localhost:5000/api/getanalysts";
+
+    $http.get(url)
+         .success(function(response){
+                console.log(response)
+                for(var analyst in response){
+                    $scope.analysts.push(JSON.parse(response[analyst]));
+                }
+           console.log($scope.analysts);
+                }
+    );
+  }
+
+  $scope.initPMs = function(){
+    var url = "http://localhost:5000/api/getpms";
+
+    $http.get(url)
+         .success(function(response){
+                console.log(response)
+                for(var pm in response){
+                    $scope.pms.push(JSON.parse(response[pm]));
+                }
+           console.log($scope.pms);
+                }
+    );
+  }
+
+  $scope.init = function(){
+    $scope.initProjects();
+    $scope.initAnalysts();
+    $scope.initPMs();
+  };
 
   $scope.init()
-  
-
-// Analyst Submit CA END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 });
 

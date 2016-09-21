@@ -27,6 +27,7 @@ def createNewSimpleWorkFlowStage(request):
 	w.setProgram(None, programs)
 	data = getDataFromRequest(request)
 	w.setData(data)
+        w.setRTN(request['projectRTN'])
 	w.status = w.getCurStatusDesc()
 	db.insertDummy(w)
 	return w
