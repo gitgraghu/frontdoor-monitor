@@ -7,6 +7,13 @@ from domain import Workflow
 from domain import Workstage
 
 # ***************************************** Workflow methods ************************************************
+teamMap = {}
+teamMap['Risk and Authetication'] = "xsurgm238425"
+teamMap['Data Platform'] = "avnysb509043"
+teamMap['Business Intelligence'] = "ztdrbh099982"
+teamMap['Commercial'] = "mlqezb440981"
+teamMap['Loyalty and Marketing'] = "epwkkx828208"
+
 
 #first request from creation page calls this method
 #PM assigned, @return Workflow
@@ -14,11 +21,11 @@ def createNewSimpleWorkFlowStage(request):
 	w = Workflow(None)
 	w.configSimpleFlow("simple")
 	assignPMToStage(w, request)
-	teams = getTeamsFromRequest(None)
-	programs = getProgramsFromRequest(None)
-	w.setTeam(teams[0], teams[1])
-	w.setProgram(programs[0], programs[1])
-	data = getDataFromRequest(None)
+	teams = getTeamsFromRequest(request)
+	programs = getProgramsFromRequest(request)
+	w.setTeam(None, teams)
+	w.setProgram(None, programs)
+	data = getDataFromRequest(request)
 	w.setData(data)
 	db.insertDummy(w)
 	return w
@@ -56,7 +63,7 @@ def analystAssessment(request):
 			stage.setData(getDataFromAnalystAssessmentRequest(request))
 		else:
 			print "analystId: " +analystId+" doesn't match the stage Id: " + stage.employee.eid
-	
+
 	for stage in stages2:
 		if stage.status != "S":
 			allAssessmentDone = False
@@ -71,7 +78,7 @@ def analystAssessment(request):
 #request coming from Pending page, triggered by PM
 #get PM from w itself, update PM and persist, @return Workflow
 def moveToPMApproveStage(request, workflow):
-	
+
 	#update PM_stage, duplicate that PM_stage to 3rd stages
 	stages1 = workflow.flow[0]
 	if(len(stages1)<1):
@@ -188,13 +195,14 @@ def createNewAnalyst(name):
 # e.g. import rest_module, and call out those methods
 # ********************************** Area 52 ****************************************
 #Test methods                                                                   *****
-#@Govind, you need provide following funcions from REST layer to use the module. 
+#@Govind, you need provide following funcions from REST layer to use the module.
 #for now, I am just faking the objects returned from request object
 
 #extract pm information from request, just a name and role for now
 #similarly, extract analyst information
 def getPMIDFromRequest(request):
-	return "epwkkx828208"
+    teamtype = request["teamType"]
+    return teamMap[teamtype];
 
 def getAnalyticsIDFromRequest(request):
 	# return "zcfqke061605"
@@ -218,23 +226,23 @@ def getFlowIdFromRequest(request):
 	return "pichtwei41981489"
 
 def getTeamsFromRequest(request):
-	res = []
-	res.append("R")
-	res.append("Risk and Authetication")
-	return res
+	# res = []
+	# res.append("R")
+	# res.append("Risk and Authetication")
+        return request['teamType']
 
 def getProgramsFromRequest(request):
-	res = []
-	res.append("R")
-	res.append("Account Level Management (ALM)")
-	return res
+	# res = []
+	# res.append("R")
+	# res.append("Account Level Management (ALM)")
+	# return res
+        return request['programname']
 
 def getAllUsers(request):
 	return db.getAllEmployees()
 
 def getDataFromRequest(request):
-	data = '{"RTN": "820820","projectname": "Rewards Redemption","programname": "Loyalty and Marketing","datecreated": "09/16/2016","status": "Waiting for Analyst Assessment"}'
-	return data
+	return request
 
 def getDataFromAssignAnalystRequest(request):
 	data = '{"RTN": "820820","projectname": "Rewards Redemption","programname": "Loyalty and Marketing", "Analyst Count":"2"}'
@@ -283,6 +291,12 @@ print "__create employees__"
 # createNewEmployee("Kyle", "PM")
 # createNewEmployee("Tom", "Analyst")
 # createNewEmployee("Steve", "Analyst")
+
+# createNewEmployee("John", "PM");
+# createNewEmployee("Chris", "PM");
+# createNewEmployee("Paul", "PM");
+# createNewEmployee("Ben", "PM");
+
 
 # getPMFromRequest(None)
 # getAllUsers(None)

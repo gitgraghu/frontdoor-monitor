@@ -9,10 +9,11 @@ app.controller('AppController', function($scope, $http){
               $scope.projects = [
                 {
                   "id" : "jkasfkha",
-                  "RTN": "820820",
+                  "projectRTN": "820820",
                   "projectname": "VLPS",
                   "programname": "Loyalty and Marketing",
                   "datecreated": "09/16/2016",
+                  "requesttype": "OOM",
                   "status": "Waiting for Analyst Selection"
                 },
                 {
@@ -21,6 +22,7 @@ app.controller('AppController', function($scope, $http){
                   "projectname": "Rewards Redemption",
                   "programname": "Loyalty and Marketing",
                   "datecreated": "09/16/2016",
+                  "requesttype": "OOM",
                   "status": "Waiting for Analyst Assessment"
                 }
               ];
@@ -32,7 +34,7 @@ app.controller('AppController', function($scope, $http){
                                 {"code": "L", "name": "Loyalty and Marketing"}
               ];
 
-              $scope.programs = [  {"code": "ALM", "name": "Account Level Management (ALM)"},
+              $scope.programs = [{"code": "ALM", "name": "Account Level Management (ALM)"},
                                 {"code": "DPDE", "name": "Data Product Development Efficiencies"},
                                 {"code": "FM","name": "Fraud Management"},
                                 {"code": "GA", "name": "Global Analytics"},
@@ -144,6 +146,8 @@ $scope.summary = {
     $http.post(url, payload)
          .success(function(response){
                     console.log(response);
+                    $scope.projects.push(response)
+                    console.log($scope.projects)
                   });
 
 
@@ -266,6 +270,19 @@ $scope.summary = {
     $('#SubmitCA').modal('hide');
 
   };
+
+
+  $scope.initProjects = function(){
+    var url = "http://localhost:5000/api/project"
+
+    $http.get(url)
+         .success(function(response){
+                    console.log(response);
+                   }
+    );
+
+
+  }
 
 // Analyst Submit CA END +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
