@@ -2,6 +2,7 @@
 
 import util
 import db
+import emailservice
 from domain import Employee
 from domain import Workflow
 from domain import Workstage
@@ -133,6 +134,7 @@ def PMFinalAction(request, status_desc, status_code):
 	for stage in stages1:
 		stage.status_desc = status_desc
 	f.status =f.getCurStatusDesc()
+	emailservice.sendEmail(f)
 	db.updateFlow(f)
 	return f
 
@@ -190,15 +192,15 @@ def getAnalystFromRequest(request):
 def getCurrentUserFromRequest(request):
 	raise ValueError("Not implemented")
 
-def createNewEmployee(name, role):
-	e = Employee(name, role, None)
+def createNewEmployee(name, role, email):
++	e = Employee(name, role, email, None)
 	db.insertEmployee(e)
 
-def createNewPM(name):
-	createNewEmployee(name, "Project Manager")
+def createNewPM(name, email):
++	createNewEmployee(name, "Project Manager", email)
 
-def createNewAnalyst(name):
-	createNewEmployee(name, "Analyst")
+def createNewAnalyst(name, email):
++	createNewEmployee(name, "Analyst", email)
 
 
 
@@ -273,15 +275,6 @@ def getDataFromPMApprovalRequest(request):
 # ********************************** Area 52 ****************************************
 
 # the main body
-print "Smoke Test Begin .. "
-
-# @simple test for service
-print "__Service__"
-
-# @simple test for database
-print "__DataBase__"
-
-print "__Web service calls__"
 
 # >> First request method avaiable <<
 # w = createNewSimpleWorkFlowStage(None)
@@ -297,6 +290,7 @@ print "__Web service calls__"
 
 # >> PM approve request
 # PMApprove(None)
+# PMReject(None)
 
 
 print "__create employees__"
