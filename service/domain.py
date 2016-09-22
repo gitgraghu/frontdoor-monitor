@@ -6,10 +6,11 @@ import time
 
 class Employee:
 
-	def __init__(self, name, role, j):
+	def __init__(self, name, role, email, j):
 		if j == None:
 			self.name = name
 			self.role = role
+			self.email = email
 			self.eid = util.generateID(6)
 		else:
 			self.__dict__ = json.loads(j)
