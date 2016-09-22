@@ -78,7 +78,7 @@ def getFlowByRTN(rtn):
 def constructStage(stage_mongo):
 	s = Workstage(json.dumps(stage_mongo, default=json_util.default), None, None, None)
 	emongo = s.employee
-	em_obj = Employee(None, None, json.dumps(emongo, default=json_util.default))
+	em_obj = Employee(None, None, None, json.dumps(emongo, default=json_util.default))
 	s.assignEmployee(em_obj)
 	return s
 
@@ -86,7 +86,7 @@ def getEmployeeById(eid):
 	cursor = flowDB.employee.find({"eid":eid})
 	em = None
 	for ec in cursor:
-		em = Employee(None, None, json.dumps(ec,default=json_util.default))
+		em = Employee(None, None, None, json.dumps(ec,default=json_util.default))
 		print "employee found:"
 		print em.__dict__
 	return em
@@ -101,7 +101,7 @@ def getAllEmployees():
 	cursor = flowDB.employee.find()
 	ems = []
 	for ec in cursor:
-		em = Employee(None, None, json.dumps(ec,default=json_util.default))
+		em = Employee(None, None, None, json.dumps(ec,default=json_util.default))
 		print "employee found:"
 		print em.__dict__
 		ems.append(em)
@@ -116,4 +116,5 @@ def getAllAnalysts():
 	ems = getAllEmployees()
 	ans = filter(lambda x : x.role=="Analyst", ems)
 	return ans
+
 
